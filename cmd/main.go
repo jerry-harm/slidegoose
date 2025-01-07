@@ -1,15 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+
+	"github.com/spf13/viper"
+
+	"slidgoose/config"
 )
 
 func main() {
-	http.HandleFunc("/",
-		func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintln(w, "SlideGoose test")
-		})
-	http.ListenAndServe(":8888", nil)
-	fmt.Println("running")
+
+	config.ReadConfig()
+
+	http.Handle("/", http.FileServer(http.Dir(viper.GetString("web"))))
+	log.Printf("open on address http://%s:%s", viper.GetString("host"), viper.GetString("port"))
+	http.ListenAndServe(
+		viper.GetString("ip")+":"+viper.GetString("port"), nil)
+
 }

@@ -1,11 +1,6 @@
-/**
- * .eslint.js
- *
- * ESLint configuration file.
- */
-
 import pluginVue from 'eslint-plugin-vue'
 import vueTsEslintConfig from '@vue/eslint-config-typescript'
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
 export default [
   {
@@ -18,19 +13,7 @@ export default [
     ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
   },
 
-  ...pluginVue.configs['flat/recommended'],
+  ...pluginVue.configs['flat/essential'],
   ...vueTsEslintConfig(),
-
-  {
-    rules: {
-      '@typescript-eslint/no-unused-expressions': [
-        'error',
-        {
-          allowShortCircuit: true,
-          allowTernary: true,
-        },
-      ],
-      'vue/multi-word-component-names': 'off',
-    }
-  }
+  skipFormatting,
 ]

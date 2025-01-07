@@ -21,14 +21,6 @@
 # Go workspace file
 go.work
 
-### Vuejs ###
-# Recommended template: Node.gitignore
-
-node_modules/
-dist/
-npm-debug.log
-yarn-error.log
-
 ### Linux ###
 *~
 
@@ -121,3 +113,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# build dir
+dist/
