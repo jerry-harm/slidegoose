@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -21,11 +20,13 @@ func ReadConfig() viper.Viper {
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Println(err)
+		// create default config file
 	}
 
+	// relative dir to abs dir
 	execPath, err := os.Executable()
     if err != nil {
-        fmt.Println(err)
+        log.Fatalln(err)
     }
 
 	if !filepath.IsAbs(viper.GetString("web")){
