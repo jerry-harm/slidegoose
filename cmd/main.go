@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/viper"
 
@@ -11,6 +13,12 @@ import (
 )
 
 func main() {
+	// chdir to right place
+	execPath, err := os.Executable()
+	if err != nil {log.Fatalln(err)}
+	execPath = filepath.Dir(execPath)
+	os.Chdir(execPath)
+
 
 	config.ReadConfig()
 
