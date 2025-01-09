@@ -7,7 +7,7 @@ echo $workdir
 rm -rf "$workdir/dist"
 mkdir "$workdir/dist"
 
-go build -o "$workdir/dist/slidegoose" "$workdir/cmd/main.go" 
+go build -o "$workdir/dist/slidegoose" "$workdir/main.go" 
 
 cd "$workdir/web"
 pnpm build --outDir "$workdir/dist/web"
