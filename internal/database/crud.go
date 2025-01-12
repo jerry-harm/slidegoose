@@ -5,8 +5,6 @@ import (
 	"log"
 	"path/filepath"
 	"slices"
-
-	"gorm.io/gorm"
 )
 
 var videoTypes = []string{".mp4"}
@@ -15,38 +13,68 @@ var pictureTypes = []string{".jpg", ".jepg", ".png"}
 
 var audioTypes = []string{".mp3"}
 
-func AddVideo(db *gorm.DB) {}
+func AddVideo(path string, info fs.FileInfo) {
+	value := Video{
+		Path:    path,
+		Size:    info.Size(),
+		Type:    filepath.Ext(path),
+		ModTime: info.ModTime(),
+	}
+	db.Create(&value)
+}
 
-func AddPicture(db *gorm.DB) {}
+func AddPicture(path string, info fs.FileInfo) {
+	value := Picture{
+		Path:    path,
+		Size:    info.Size(),
+		Type:    filepath.Ext(path),
+		ModTime: info.ModTime(),
+	}
+	db.Create(&value)
+}
 
-func AddAudio(db *gorm.DB) {}
+func AddAudio(path string, info fs.FileInfo) {
+	value := Audio{
+		Path:    path,
+		Size:    info.Size(),
+		Type:    filepath.Ext(path),
+		ModTime: info.ModTime(),
+	}
+	db.Create(&value)
+}
 
-func AddFile(db *gorm.DB, path string, d fs.DirEntry) error {
+func AddFile(path string, d fs.DirEntry) {
 	info, err := d.Info()
 	if err != nil {
-		log.Panicln(path, err, "not add")
+		log.Println(path, err)
 	} else {
 		ext := filepath.Ext(path)
 		info.ModTime()
 		if slices.Contains(videoTypes, ext) {
-			AddVideo(db)
+			AddVideo(path, info)
 		} else if slices.Contains(pictureTypes, ext) {
-			AddPicture(db)
+			AddPicture(path, info)
 		} else if slices.Contains(audioTypes, ext) {
-			AddAudio(db)
+			AddAudio(path, info)
 		}
 	}
-	return nil
 }
 
-func AddDir(db *gorm.DB, path string) {
+func AddDir(path string) int {
+	var files_count int = 0
 	filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
-		if !d.IsDir() {
-			err := AddFile(db, path, d)
-			if err != nil {
-
-			}
+		if err != nil {
+			log.Println(err)
+			return filepath.SkipDir
 		}
+
+		if !d.IsDir() {
+			AddFile(path, d)
+			files_count++
+		}
+
 		return nil
 	})
+
+	return files_count
 }

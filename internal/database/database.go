@@ -10,6 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var db *gorm.DB
+
 // data modules
 type Tag struct {
 	ID          uint `gorm:"primarykey"`
@@ -79,7 +81,7 @@ type Audio struct {
 	Path        string `gorm:"unique"`
 	Type        string
 	Size        int64
-	ModTime     *time.Time
+	ModTime     time.Time
 	Description sql.NullString
 	Tags        []*Tag `gorm:"many2many:audio_tags;"`
 }
@@ -92,14 +94,15 @@ type Script struct {
 }
 
 func InitDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(viper.GetString("database")), &gorm.Config{})
+	ldb, err := gorm.Open(sqlite.Open(viper.GetString("database")), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = db.AutoMigrate(&Tag{}, &TagGroup{}, &Video{}, &Clip{}, &Picture{}, &Audio{}, &Script{})
+	err = ldb.AutoMigrate(&Tag{}, &TagGroup{}, &Video{}, &Clip{}, &Picture{}, &Audio{}, &Script{})
 	if err != nil {
 		log.Fatalln(err)
 	}
-	return db
+	db = ldb
+	return ldb
 }

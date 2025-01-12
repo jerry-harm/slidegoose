@@ -116,3 +116,6 @@ $RECYCLE.BIN/
 
 # build dir
 dist/
+
+# test file
+testfile/

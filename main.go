@@ -19,24 +19,25 @@ import (
 func main() {
 	// chdir to right place
 	execPath, err := os.Executable()
-	if err != nil {log.Fatalln(err)}
+	if err != nil {
+		log.Fatalln(err)
+	}
 	execPath = filepath.Dir(execPath)
 	os.Chdir(execPath)
 
 	// read config
 	config.ReadConfig()
-	
-	database.InitDB()
 
+	database.InitDB()
 
 	// get router
 	router := router.GetRouter()
-	
+
 	log.Printf("open on address %s:%s", viper.GetString("host"), viper.GetString("port"))
 
 	// define server
 	srv := &http.Server{
-		Addr:    viper.GetString("host")+":"+viper.GetString("port"),
+		Addr:    viper.GetString("host") + ":" + viper.GetString("port"),
 		Handler: router,
 	}
 
