@@ -78,3 +78,15 @@ func AddDir(path string) int {
 
 	return files_count
 }
+
+func AddTag(name string, description string) {
+	value := Tag{
+		Name: name,
+	}
+	if len(description) != 0 {
+		value.Description.String = description
+		value.Description.Valid = true
+	}
+
+	db.Create(&value)
+}

@@ -17,7 +17,7 @@ type Tag struct {
 	ID          uint `gorm:"primarykey"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	Name        string `gorm:"primarykey"`
+	Name        string `gorm:"unique"`
 	Description sql.NullString
 	Group       []*TagGroup `gorm:"many2many:taggroup_tags;"`
 
@@ -31,7 +31,7 @@ type TagGroup struct {
 	ID          uint `gorm:"primarykey"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	Name        string `gorm:"primarykey"`
+	Name        string `gorm:"unique"`
 	Description sql.NullString
 	Tags        []*Tag `gorm:"many2many:taggroup_tags;"`
 }
@@ -91,6 +91,7 @@ type Script struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Text      string `gorm:"type:text"`
+	Name      string `gorm:"unique"`
 }
 
 func InitDB() *gorm.DB {
