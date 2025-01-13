@@ -17,11 +17,11 @@ func GetRouter() *gin.Engine {
 }
 
 func AddFile(c *gin.Context) {
-	type FilesForm struct {
-		Files []string `form:"files" json:"files" xml:"files" binding:"required"`
+	type filesForm struct {
+		Files []string
 	}
 
-	var form FilesForm
+	var form filesForm
 	if err := c.Bind(&form); err != nil {
 		c.JSON(400, gin.H{"status": err.Error()})
 		return
