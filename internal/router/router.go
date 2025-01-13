@@ -2,6 +2,7 @@ package router
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -14,6 +15,7 @@ func GetRouter() *gin.Engine {
 	router.Static("/", viper.GetString("web"))
 	router.POST("/file", AddFile)
 	router.POST("/tag", AddTag)
+	router.POST("/video/:id/tag", SetVideoTag)
 	return router
 }
 
@@ -50,5 +52,29 @@ func AddTag(c *gin.Context) {
 	}
 
 	database.AddTag(form.Name, form.Description)
+	c.JSON(200, gin.H{"status": "OK"})
+}
+
+func SetVideoTag(c *gin.Context) {
+	type tagForm struct {
+		Tag uint
+	}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		log.Panicln(err)
+		c.JSON(400, gin.H{"status": err.Error()})
+		return
+	}
+
+	var form tagForm
+	if err := c.Bind(&form); err != nil {
+		c.JSON(400, gin.H{"status": err.Error()})
+		return
+	}
+
+	if err := database.SetVideoTag(uint(id), form.Tag); err != nil {
+		c.JSON(400, gin.H{"status": err.Error()})
+		return
+	}
 	c.JSON(200, gin.H{"status": "OK"})
 }
