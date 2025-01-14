@@ -78,33 +78,3 @@ func AddDir(path string) int {
 
 	return files_count
 }
-
-func AddTag(name string, description string) {
-	value := Tag{
-		Name: name,
-	}
-	if len(description) != 0 {
-		value.Description.String = description
-		value.Description.Valid = true
-	}
-
-	db.Create(&value)
-}
-
-func SetVideoTag(video_id uint, tag_id uint) error {
-	var video Video
-	if err := db.First(&video, video_id).Error; err != nil {
-		return err
-	}
-
-	var tag Tag
-
-	if err := db.First(&tag, tag_id).Error; err != nil {
-		return err
-	}
-	video.Tags = append(video.Tags, &tag)
-	if err := db.Save(&video).Error; err != nil {
-		return err
-	}
-	return nil
-}
