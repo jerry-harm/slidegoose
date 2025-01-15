@@ -9,12 +9,12 @@ import (
 )
 
 func AddTag(c *gin.Context) {
-	type tagForm struct {
+	type addTagForm struct {
 		Name        string `binding:"required"`
 		Description string
 	}
 
-	var form tagForm
+	var form addTagForm
 	if err := c.Bind(&form); err != nil {
 		c.JSON(400, gin.H{"status": err.Error()})
 		return
@@ -25,7 +25,7 @@ func AddTag(c *gin.Context) {
 }
 
 func setTag(c *gin.Context, fn func(uint, uint) error) {
-	type tagForm struct {
+	type setTagForm struct {
 		Tag uint
 	}
 	id, err := strconv.Atoi(c.Param("id"))
@@ -34,7 +34,7 @@ func setTag(c *gin.Context, fn func(uint, uint) error) {
 		return
 	}
 
-	var form tagForm
+	var form setTagForm
 	if err := c.Bind(&form); err != nil {
 		c.JSON(400, gin.H{"status": err.Error()})
 		return

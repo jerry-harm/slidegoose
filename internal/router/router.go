@@ -21,10 +21,11 @@ func GetRouter() *gin.Engine {
 	return router
 }
 
+type filesForm struct {
+	Files []string
+}
+
 func AddFile(c *gin.Context) {
-	type filesForm struct {
-		Files []string
-	}
 
 	var form filesForm
 	if err := c.Bind(&form); err != nil {
