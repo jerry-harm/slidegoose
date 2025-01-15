@@ -12,12 +12,35 @@ import (
 func GetRouter() *gin.Engine {
 	router := gin.Default()
 	router.Static("/", viper.GetString("web"))
-	router.POST("/file", AddFile)
-	router.POST("/tag", AddTag)
-	router.POST("/video/:id/tag", SetVideoTag)
-	router.POST("/clip/:id/tag", SetClipTag)
-	router.POST("/audio/:id/tag", SetAudioTag)
-	router.POST("/picture/:id/tag", SetPictureTag)
+
+	api := router.Group("api")
+	{
+		file := api.Group("file")
+		{
+			file.POST("", AddFile)
+		}
+		tag := api.Group("tag")
+		{
+			tag.POST("", AddTag)
+		}
+		video := api.Group("video")
+		{
+			video.POST("/:id/tag", SetVideoTag)
+		}
+		clip := api.Group("clip")
+		{
+			clip.POST("/:id/tag", SetClipTag)
+		}
+		picture := api.Group("picture")
+		{
+			picture.POST("/:id/tag", SetPictureTag)
+		}
+		audio := api.Group("audio")
+		{
+			audio.POST("/:id/tag", SetAudioTag)
+		}
+	}
+
 	return router
 }
 

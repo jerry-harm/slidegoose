@@ -16,6 +16,10 @@ import (
 	"slidgoose/internal/router"
 )
 
+// @title           Slide Goose
+// @version         alpha
+
+// @BasePath  /api
 func main() {
 	// chdir to right place
 	execPath, err := os.Executable()
