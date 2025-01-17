@@ -7,6 +7,8 @@ import (
 	"slices"
 )
 
+// TODO only in local dir?
+
 var videoTypes = []string{".mp4"}
 
 var pictureTypes = []string{".jpg", ".jepg", ".png"}

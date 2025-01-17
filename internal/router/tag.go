@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"slidgoose/internal/database"
+	"slidegoose/internal/database"
 )
 
 func AddTag(c *gin.Context) {

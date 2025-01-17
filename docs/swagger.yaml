@@ -1,0 +1,31 @@
+basePath: /api
+definitions:
+  router.filesForm:
+    properties:
+      files:
+        items:
+          type: string
+        type: array
+    type: object
+info:
+  contact: {}
+  title: Slide Goose
+  version: alpha
+paths:
+  /file:
+    post:
+      description: return number of added files
+      parameters:
+      - description: files
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/router.filesForm'
+      produces:
+      - application/json
+      responses: {}
+      summary: add file or files
+      tags:
+      - system
+swagger: "2.0"

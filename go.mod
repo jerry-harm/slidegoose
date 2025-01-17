@@ -1,4 +1,4 @@
-module slidgoose
+module slidegoose
 
 go 1.23.4
 

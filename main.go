@@ -1,5 +1,7 @@
 package main
 
+//go:generate swag init
+
 import (
 	"context"
 	"log"
@@ -11,14 +13,13 @@ import (
 
 	"github.com/spf13/viper"
 
-	"slidgoose/config"
-	"slidgoose/internal/database"
-	"slidgoose/internal/router"
+	"slidegoose/config"
+	"slidegoose/internal/database"
+	"slidegoose/internal/router"
 )
 
 // @title           Slide Goose
 // @version         alpha
-
 // @BasePath  /api
 func main() {
 	// chdir to right place
@@ -37,6 +38,7 @@ func main() {
 	// get router
 	router := router.GetRouter()
 
+	// log the address
 	log.Printf("open on address %s:%s", viper.GetString("host"), viper.GetString("port"))
 
 	// define server

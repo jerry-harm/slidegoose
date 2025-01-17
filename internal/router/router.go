@@ -1,17 +1,32 @@
 package router
 
 import (
-	"log"
+	"io/fs"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"slidgoose/internal/database"
+	"slidegoose/web"
+
+	_ "slidegoose/docs"
 )
 
 func GetRouter() *gin.Engine {
 	router := gin.Default()
-	router.Static("/", viper.GetString("web"))
+
+	// static file
+	router.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/web")
+	})
+	staticFS, _ := fs.Sub(web.WebFS, "dist")
+	router.StaticFileFS("/favicon.ico", "/favicon.ico", http.FS(staticFS))
+	router.StaticFS("/web", http.FS(staticFS))
+
+	if gin.Mode() != gin.ReleaseMode {
+		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	api := router.Group("api")
 	{
@@ -42,25 +57,4 @@ func GetRouter() *gin.Engine {
 	}
 
 	return router
-}
-
-type filesForm struct {
-	Files []string
-}
-
-func AddFile(c *gin.Context) {
-
-	var form filesForm
-	if err := c.Bind(&form); err != nil {
-		c.JSON(400, gin.H{"status": err.Error()})
-		return
-	}
-
-	file_count := 0
-	for _, v := range form.Files {
-		log.Println("adding", v)
-		file_count += database.AddDir(v)
-	}
-
-	c.JSON(200, gin.H{"status": "200", "OK": file_count})
 }
