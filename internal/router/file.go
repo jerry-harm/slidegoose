@@ -16,7 +16,7 @@ type filesForm struct {
 // @Summary      add file or files
 // @Description  return number of added files
 // @param       name body    filesForm  true  "files"
-// @Tags         system
+// @Tags         file
 // @Produce      json
 // @Router       /file [post]
 func AddFile(c *gin.Context) {
@@ -32,6 +32,9 @@ func AddFile(c *gin.Context) {
 		log.Println("adding", v)
 		file_count += database.AddDir(v)
 	}
-
-	c.JSON(200, gin.H{"status": "200", "OK": file_count})
+	if file_count == 0 {
+		c.JSON(400, gin.H{"status": "nothing added"})
+		return
+	}
+	c.JSON(201, gin.H{"status": "200", "created": file_count})
 }

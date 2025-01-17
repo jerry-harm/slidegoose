@@ -20,6 +20,8 @@ import (
 
 // @title           Slide Goose
 // @version         alpha
+// @license.name 	GPL-3.0-or-later
+// @license.url		https://www.gnu.org/licenses/gpl-3.0.html
 // @BasePath  /api
 func main() {
 	// chdir to right place

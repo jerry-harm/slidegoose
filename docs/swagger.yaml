@@ -1,5 +1,14 @@
 basePath: /api
 definitions:
+  router.addTagForm:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
   router.filesForm:
     properties:
       files:
@@ -7,11 +16,61 @@ definitions:
           type: string
         type: array
     type: object
+  router.setTagForm:
+    properties:
+      tag:
+        type: integer
+    type: object
 info:
   contact: {}
+  license:
+    name: GPL-3.0-or-later
+    url: https://www.gnu.org/licenses/gpl-3.0.html
   title: Slide Goose
   version: alpha
 paths:
+  /audio/{audioId}/tag:
+    post:
+      description: return status
+      parameters:
+      - description: tag
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/router.setTagForm'
+      - description: audio id
+        in: path
+        name: audioId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: set audio Tag
+      tags:
+      - tag
+  /clip/{clipId}/tag:
+    post:
+      description: return status
+      parameters:
+      - description: tag
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/router.setTagForm'
+      - description: clip id
+        in: path
+        name: clipId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: set clip Tag
+      tags:
+      - tag
   /file:
     post:
       description: return number of added files
@@ -27,5 +86,63 @@ paths:
       responses: {}
       summary: add file or files
       tags:
-      - system
+      - file
+  /picture/{pictureId}/tag:
+    post:
+      description: return status
+      parameters:
+      - description: tag
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/router.setTagForm'
+      - description: picture id
+        in: path
+        name: pictureId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: set picture Tag
+      tags:
+      - tag
+  /tag:
+    post:
+      description: return status
+      parameters:
+      - description: tag
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/router.addTagForm'
+      produces:
+      - application/json
+      responses: {}
+      summary: add Tag
+      tags:
+      - tag
+  /video/{videoId}/tag:
+    post:
+      description: return status
+      parameters:
+      - description: tag
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/router.setTagForm'
+      - description: video id
+        in: path
+        name: videoId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: set video Tag
+      tags:
+      - tag
 swagger: "2.0"

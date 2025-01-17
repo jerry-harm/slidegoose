@@ -7,7 +7,7 @@ import (
 	"slices"
 )
 
-// TODO only in local dir?
+// TODO only in local dir? or allow to pack up all the things...
 
 var videoTypes = []string{".mp4"}
 
@@ -45,7 +45,7 @@ func AddAudio(path string, info fs.FileInfo) {
 	db.Create(&value)
 }
 
-func AddFile(path string, d fs.DirEntry) {
+func AddFile(path string, d fs.DirEntry) bool {
 	info, err := d.Info()
 	if err != nil {
 		log.Println(path, err)
@@ -54,12 +54,17 @@ func AddFile(path string, d fs.DirEntry) {
 		info.ModTime()
 		if slices.Contains(videoTypes, ext) {
 			AddVideo(path, info)
+			return true
 		} else if slices.Contains(pictureTypes, ext) {
 			AddPicture(path, info)
+			return true
 		} else if slices.Contains(audioTypes, ext) {
 			AddAudio(path, info)
+			return true
 		}
+
 	}
+	return false
 }
 
 func AddDir(path string) int {
@@ -71,8 +76,10 @@ func AddDir(path string) int {
 		}
 
 		if !d.IsDir() {
-			AddFile(path, d)
-			files_count++
+			if AddFile(path, d) {
+				files_count++
+			}
+
 		}
 
 		return nil
