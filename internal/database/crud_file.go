@@ -3,6 +3,7 @@ package database
 import (
 	"io/fs"
 	"log"
+	"net/url"
 	"path/filepath"
 	"slices"
 )
@@ -15,55 +16,44 @@ var pictureTypes = []string{".jpg", ".jepg", ".png"}
 
 var audioTypes = []string{".mp3"}
 
-func AddVideo(path string, info fs.FileInfo) {
-	value := Video{
-		Path:    path,
-		Size:    info.Size(),
-		Type:    filepath.Ext(path),
-		ModTime: info.ModTime(),
-	}
-	db.Create(&value)
-}
-
-func AddPicture(path string, info fs.FileInfo) {
-	value := Picture{
-		Path:    path,
-		Size:    info.Size(),
-		Type:    filepath.Ext(path),
-		ModTime: info.ModTime(),
-	}
-	db.Create(&value)
-}
-
-func AddAudio(path string, info fs.FileInfo) {
-	value := Audio{
-		Path:    path,
-		Size:    info.Size(),
-		Type:    filepath.Ext(path),
-		ModTime: info.ModTime(),
-	}
-	db.Create(&value)
-}
-
-func AddFile(path string, d fs.DirEntry) bool {
+func AddLocalFile(path string, d fs.DirEntry) bool {
 	info, err := d.Info()
 	if err != nil {
-		log.Println(path, err)
-	} else {
-		ext := filepath.Ext(path)
-		info.ModTime()
-		if slices.Contains(videoTypes, ext) {
-			AddVideo(path, info)
-			return true
-		} else if slices.Contains(pictureTypes, ext) {
-			AddPicture(path, info)
-			return true
-		} else if slices.Contains(audioTypes, ext) {
-			AddAudio(path, info)
-			return true
-		}
-
+		return false
 	}
+	var url url.URL
+	url.Path = path
+	url.Scheme = "file"
+	ext := filepath.Ext(path)
+	if slices.Contains(videoTypes, ext) {
+		value := Audio{}
+		value.URL = url.String()
+		value.Size.Int64 = info.Size()
+		value.Size.Valid = true
+		if err := db.Create(&value).Error; err != nil {
+			return false
+		}
+		return true
+	} else if slices.Contains(pictureTypes, ext) {
+		value := Picture{}
+		value.URL = url.String()
+		value.Size.Int64 = info.Size()
+		value.Size.Valid = true
+		if err := db.Create(&value).Error; err != nil {
+			return false
+		}
+		return true
+	} else if slices.Contains(audioTypes, ext) {
+		value := Audio{}
+		value.URL = url.String()
+		value.Size.Int64 = info.Size()
+		value.Size.Valid = true
+		if err := db.Create(&value).Error; err != nil {
+			return false
+		}
+		return true
+	}
+
 	return false
 }
 
@@ -76,7 +66,7 @@ func AddDir(path string) int {
 		}
 
 		if !d.IsDir() {
-			if AddFile(path, d) {
+			if AddLocalFile(path, d) {
 				files_count++
 			}
 

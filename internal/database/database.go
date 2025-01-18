@@ -19,12 +19,13 @@ type Tag struct {
 	UpdatedAt   time.Time
 	Name        string `gorm:"unique"`
 	Description sql.NullString
-	Group       []*TagGroup `gorm:"many2many:taggroup_tags;"`
 
-	Videos   []*Tag `gorm:"many2many:video_tags;"`
-	Pictures []*Tag `gorm:"many2many:picture_tags;"`
-	Audios   []*Tag `gorm:"many2many:audio_tags;"`
-	Clips    []*Tag `gorm:"many2many:clip_tags;"`
+	Group    []TagGroup `gorm:"many2many:taggroup_tags;"`
+	Videos   []Video    `gorm:"many2many:video_tags;"`
+	Pictures []Picture  `gorm:"many2many:picture_tags;"`
+	Audios   []Audio    `gorm:"many2many:audio_tags;"`
+	Clips    []Clip     `gorm:"many2many:clip_tags;"`
+	Script   []Script   `gorm:"many2many:script_tags;"`
 }
 
 type TagGroup struct {
@@ -33,63 +34,58 @@ type TagGroup struct {
 	UpdatedAt   time.Time
 	Name        string `gorm:"unique"`
 	Description sql.NullString
-	Tags        []*Tag `gorm:"many2many:taggroup_tags;"`
+	Tags        []Tag `gorm:"many2many:taggroup_tags;"`
+}
+
+type File struct {
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	URL         string `gorm:"unique"`
+	Size        sql.NullInt64
+	Description sql.NullString
+	Name        sql.NullString
+	Hash        sql.NullString
 }
 
 type Video struct {
-	ID          uint `gorm:"primarykey"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	Path        string `gorm:"unique"`
-	Type        string
-	Size        int64
-	ModTime     time.Time
-	Description sql.NullString
-	Tags        []*Tag `gorm:"many2many:video_tags;"`
-	Duriation   uint
-	Clips       []Clip `gorm:"foreignKey:VideoID"`
+	ID uint `gorm:"primarykey"`
+	File
+	Duriation uint
+	Clips     []Clip `gorm:"foreignKey:VideoID"`
+	Tags      []Tag  `gorm:"many2many:video_tags;"`
 }
 
 // child of video
 type Clip struct {
-	ID        uint `gorm:"primarykey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Start     uint
-	End       uint
-	Tags      []*Tag `gorm:"many2many:clip_tags;"`
+	ID          uint `gorm:"primarykey"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	Name        sql.NullString
+	Description sql.NullString
+	Start       uint
+	End         uint
+	Tags        []Tag `gorm:"many2many:clip_tags;"`
 
 	VideoID uint `gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 type Picture struct {
-	ID          uint `gorm:"primarykey"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	Path        string `gorm:"unique"`
-	Type        string
-	Size        int64
-	ModTime     time.Time
-	Description sql.NullString
-	Tags        []*Tag `gorm:"many2many:picture_tags;"`
+	ID uint `gorm:"primarykey"`
+	File
+	Tags []Tag `gorm:"many2many:picture_tags;"`
 }
 
 type Audio struct {
-	ID          uint `gorm:"primarykey"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	Path        string `gorm:"unique"`
-	Type        string
-	Size        int64
-	ModTime     time.Time
-	Description sql.NullString
-	Tags        []*Tag `gorm:"many2many:audio_tags;"`
+	ID uint `gorm:"primarykey"`
+	File
+	Tags []Tag `gorm:"many2many:audio_tags;"`
 }
 
 type Script struct {
 	ID        uint `gorm:"primarykey"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Tags      []Tag  `gorm:"many2many:script_tags;"`
 	Text      string `gorm:"type:text"`
 	Name      string `gorm:"unique"`
 }

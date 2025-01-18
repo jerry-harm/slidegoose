@@ -1,6 +1,6 @@
 # slidegoose
 
-pictures and videos manager focused on slideshow
+pictures and videos manager focused on slideshow, and which should be able to be used as a video game engine.
 
 ## TODO list
 
@@ -11,7 +11,7 @@ pictures and videos manager focused on slideshow
   - [ ] 图片格式支持
 - [ ] 在线资源缓存
 - [ ] 资源数据库
-  - [ ] tag
+  - [x] tag
   - [ ] 分组
   - [ ] 视频图片、音频、脚本资源分别管理
 - [ ] 资源获取 api

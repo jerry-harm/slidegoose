@@ -8,6 +8,12 @@ import (
 	"slidegoose/internal/database"
 )
 
+type JSONResult struct {
+	Code    int         `json:"code" example:"400"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
 type addTagForm struct {
 	Name        string `binding:"required"`
 	Description string
@@ -20,16 +26,17 @@ type addTagForm struct {
 // @Tags         tag
 // @Produce      json
 // @Router       /tag [post]
+// @Success 	201
+// @Failure 	400 {object} JSONResult
 func AddTag(c *gin.Context) {
-
 	var form addTagForm
 	if err := c.Bind(&form); err != nil {
-		c.JSON(400, gin.H{"status": err.Error()})
+		c.JSON(400, JSONResult{Code: 400, Message: err.Error()})
 		return
 	}
 
 	database.AddTag(form.Name, form.Description)
-	c.JSON(201, gin.H{"status": "OK"})
+	c.Status(201)
 }
 
 type setTagForm struct {
@@ -40,21 +47,21 @@ func setTag(c *gin.Context, fn func(uint, uint) error) {
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(400, gin.H{"status": err.Error()})
+		c.JSON(400, JSONResult{Code: 400, Message: err.Error()})
 		return
 	}
 
 	var form setTagForm
 	if err := c.Bind(&form); err != nil {
-		c.JSON(400, gin.H{"status": err.Error()})
+		c.JSON(400, JSONResult{Code: 400, Message: err.Error()})
 		return
 	}
 
 	if err := fn(uint(id), form.Tag); err != nil {
-		c.JSON(400, gin.H{"status": err.Error()})
+		c.JSON(400, JSONResult{Code: 400, Message: err.Error()})
 		return
 	}
-	c.JSON(201, gin.H{"status": "OK"})
+	c.Status(201)
 }
 
 // SetVideoTagDoc
@@ -65,6 +72,8 @@ func setTag(c *gin.Context, fn func(uint, uint) error) {
 // @Tags         tag
 // @Produce      json
 // @Router       /video/{videoId}/tag [post]
+// @Success 	201
+// @Failure 	400 {object} JSONResult
 func SetVideoTag(c *gin.Context) {
 	setTag(c, database.SetVideoTag)
 }
@@ -77,6 +86,8 @@ func SetVideoTag(c *gin.Context) {
 // @Tags         tag
 // @Produce      json
 // @Router       /clip/{clipId}/tag [post]
+// @Success 	201
+// @Failure 	400 {object} JSONResult
 func SetClipTag(c *gin.Context) {
 	setTag(c, database.SetClipTag)
 }
@@ -89,6 +100,8 @@ func SetClipTag(c *gin.Context) {
 // @Tags         tag
 // @Produce      json
 // @Router       /picture/{pictureId}/tag [post]
+// @Success 	201
+// @Failure 	400 {object} JSONResult
 func SetPictureTag(c *gin.Context) {
 	setTag(c, database.SetPictureTag)
 }
@@ -101,6 +114,8 @@ func SetPictureTag(c *gin.Context) {
 // @Tags         tag
 // @Produce      json
 // @Router       /audio/{audioId}/tag [post]
+// @Success 	201
+// @Failure 	400 {object} JSONResult
 func SetAudioTag(c *gin.Context) {
 	setTag(c, database.SetAudioTag)
 }

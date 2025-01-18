@@ -47,7 +47,17 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/router.JSONResult"
+                        }
+                    }
+                }
             }
         },
         "/clip/{clipId}/tag": {
@@ -78,7 +88,17 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/router.JSONResult"
+                        }
+                    }
+                }
             }
         },
         "/file": {
@@ -133,7 +153,17 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/router.JSONResult"
+                        }
+                    }
+                }
             }
         },
         "/tag": {
@@ -157,7 +187,17 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/router.JSONResult"
+                        }
+                    }
+                }
             }
         },
         "/video/{videoId}/tag": {
@@ -188,11 +228,34 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/router.JSONResult"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "router.JSONResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 400
+                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "router.addTagForm": {
             "type": "object",
             "required": [
