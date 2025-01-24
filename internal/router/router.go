@@ -41,6 +41,7 @@ func GetRouter() *gin.Engine {
 		video := api.Group("video")
 		{
 			video.POST("/:id/tag", SetVideoTag)
+			video.GET("/:id/info", GetVideoInfo)
 		}
 		clip := api.Group("clip")
 		{
@@ -49,6 +50,7 @@ func GetRouter() *gin.Engine {
 		picture := api.Group("picture")
 		{
 			picture.POST("/:id/tag", SetPictureTag)
+			picture.GET("/:id/info", GetPictureInfo)
 		}
 		audio := api.Group("audio")
 		{

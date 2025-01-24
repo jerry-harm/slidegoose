@@ -104,8 +104,41 @@ paths:
           $ref: '#/definitions/router.filesForm'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/router.JSONResult'
+            - properties:
+                data:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/router.JSONResult'
       summary: add file or files
+      tags:
+      - file
+  /picture/{id}/info:
+    get:
+      description: return picture info
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/router.JSONResult'
+        "404":
+          description: Not Found
       tags:
       - file
   /picture/{pictureId}/tag:
@@ -157,6 +190,26 @@ paths:
       summary: add Tag
       tags:
       - tag
+  /video/{id}/info:
+    get:
+      description: return video info
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/router.JSONResult'
+        "404":
+          description: Not Found
+      tags:
+      - file
   /video/{videoId}/tag:
     post:
       description: return status

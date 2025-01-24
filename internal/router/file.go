@@ -40,3 +40,39 @@ func AddFile(c *gin.Context) {
 	}
 	c.JSON(201, JSONResult{Code: 201, Data: file_count})
 }
+
+// GetVideoInfo
+// @Description  return video info
+// @param       id  path    int  true  "id"
+// @Tags         file
+// @Produce      json
+// @Router       /video/{id}/info [get]
+// @Success 	200	{object} JSONResult
+// @Failure 	404
+func GetVideoInfo(c *gin.Context) {
+	id := c.Param("id")
+	var video database.Video
+	if err := database.DB.First(&video, id).Error; err != nil {
+		c.Status(404)
+		return
+	}
+	c.JSON(200, JSONResult{Code: 200, Data: video})
+}
+
+// GetPictureInfo
+// @Description  return picture info
+// @param       id  path    int  true  "id"
+// @Tags         file
+// @Produce      json
+// @Router       /picture/{id}/info [get]
+// @Success 	200	{object} JSONResult
+// @Failure 	404
+func GetPictureInfo(c *gin.Context) {
+	id := c.Param("id")
+	var picture database.Picture
+	if err := database.DB.First(&picture, id).Error; err != nil {
+		c.Status(404)
+		return
+	}
+	c.JSON(200, JSONResult{Code: 200, Data: picture})
+}

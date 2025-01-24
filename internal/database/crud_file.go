@@ -25,30 +25,28 @@ func AddLocalFile(path string, d fs.DirEntry) bool {
 	url.Path = path
 	url.Scheme = "file"
 	ext := filepath.Ext(path)
+	size := info.Size()
 	if slices.Contains(videoTypes, ext) {
 		value := Audio{}
 		value.URL = url.String()
-		value.Size.Int64 = info.Size()
-		value.Size.Valid = true
-		if err := db.Create(&value).Error; err != nil {
+		value.Size = &size
+		if err := DB.Create(&value).Error; err != nil {
 			return false
 		}
 		return true
 	} else if slices.Contains(pictureTypes, ext) {
 		value := Picture{}
 		value.URL = url.String()
-		value.Size.Int64 = info.Size()
-		value.Size.Valid = true
-		if err := db.Create(&value).Error; err != nil {
+		value.Size = &size
+		if err := DB.Create(&value).Error; err != nil {
 			return false
 		}
 		return true
 	} else if slices.Contains(audioTypes, ext) {
 		value := Audio{}
 		value.URL = url.String()
-		value.Size.Int64 = info.Size()
-		value.Size.Valid = true
-		if err := db.Create(&value).Error; err != nil {
+		value.Size = &size
+		if err := DB.Create(&value).Error; err != nil {
 			return false
 		}
 		return true

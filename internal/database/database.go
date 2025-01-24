@@ -1,7 +1,6 @@
 package database
 
 import (
-	"database/sql"
 	"log"
 	"time"
 
@@ -10,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 // data modules
 type Tag struct {
@@ -18,7 +17,7 @@ type Tag struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	Name        string `gorm:"unique"`
-	Description sql.NullString
+	Description *string
 
 	Group    []TagGroup `gorm:"many2many:taggroup_tags;"`
 	Videos   []Video    `gorm:"many2many:video_tags;"`
@@ -33,7 +32,7 @@ type TagGroup struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	Name        string `gorm:"unique"`
-	Description sql.NullString
+	Description *string
 	Tags        []Tag `gorm:"many2many:taggroup_tags;"`
 }
 
@@ -41,10 +40,10 @@ type File struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	URL         string `gorm:"unique"`
-	Size        sql.NullInt64
-	Description sql.NullString
-	Name        sql.NullString
-	Hash        sql.NullString
+	Size        *int64
+	Description *string
+	Name        *string
+	Hash        *string
 }
 
 type Video struct {
@@ -60,8 +59,8 @@ type Clip struct {
 	ID          uint `gorm:"primarykey"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	Name        sql.NullString
-	Description sql.NullString
+	Name        *string
+	Description *string
 	Start       uint
 	End         uint
 	Tags        []Tag `gorm:"many2many:clip_tags;"`
@@ -100,6 +99,6 @@ func InitDB() *gorm.DB {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	db = ldb
+	DB = ldb
 	return ldb
 }

@@ -5,11 +5,10 @@ func AddTag(name string, description string) {
 		Name: name,
 	}
 	if len(description) != 0 {
-		value.Description.String = description
-		value.Description.Valid = true
+		value.Description = &description
 	}
 
-	db.Create(&value)
+	DB.Create(&value)
 }
 
 type tagable interface {
@@ -18,7 +17,7 @@ type tagable interface {
 
 func (s *Video) SetTag(tag Tag) error {
 	s.Tags = append(s.Tags, tag)
-	if err := db.Save(&s).Error; err != nil {
+	if err := DB.Save(&s).Error; err != nil {
 		return err
 	}
 	return nil
@@ -26,28 +25,28 @@ func (s *Video) SetTag(tag Tag) error {
 
 func (s *Clip) SetTag(tag Tag) error {
 	s.Tags = append(s.Tags, tag)
-	if err := db.Save(&s).Error; err != nil {
+	if err := DB.Save(&s).Error; err != nil {
 		return err
 	}
 	return nil
 }
 func (s *Picture) SetTag(tag Tag) error {
 	s.Tags = append(s.Tags, tag)
-	if err := db.Save(&s).Error; err != nil {
+	if err := DB.Save(&s).Error; err != nil {
 		return err
 	}
 	return nil
 }
 func (s *Audio) SetTag(tag Tag) error {
 	s.Tags = append(s.Tags, tag)
-	if err := db.Save(&s).Error; err != nil {
+	if err := DB.Save(&s).Error; err != nil {
 		return err
 	}
 	return nil
 }
 func (s *Script) SetTag(tag Tag) error {
 	s.Tags = append(s.Tags, tag)
-	if err := db.Save(&s).Error; err != nil {
+	if err := DB.Save(&s).Error; err != nil {
 		return err
 	}
 	return nil
@@ -55,7 +54,7 @@ func (s *Script) SetTag(tag Tag) error {
 
 func SetTag(s tagable, tag_id uint) error {
 	var tag Tag
-	if err := db.First(&tag, tag_id).Error; err != nil {
+	if err := DB.First(&tag, tag_id).Error; err != nil {
 		return err
 	}
 	if err := s.SetTag(tag); err != nil {
@@ -66,7 +65,7 @@ func SetTag(s tagable, tag_id uint) error {
 
 func SetVideoTag(id uint, tag_id uint) error {
 	var s Video
-	if err := db.First(&s, id).Error; err != nil {
+	if err := DB.First(&s, id).Error; err != nil {
 		return err
 	}
 
@@ -78,7 +77,7 @@ func SetVideoTag(id uint, tag_id uint) error {
 
 func SetClipTag(id uint, tag_id uint) error {
 	var s Clip
-	if err := db.First(&s, id).Error; err != nil {
+	if err := DB.First(&s, id).Error; err != nil {
 		return err
 	}
 
@@ -90,7 +89,7 @@ func SetClipTag(id uint, tag_id uint) error {
 
 func SetPictureTag(id uint, tag_id uint) error {
 	var s Picture
-	if err := db.First(&s, id).Error; err != nil {
+	if err := DB.First(&s, id).Error; err != nil {
 		return err
 	}
 
@@ -102,7 +101,7 @@ func SetPictureTag(id uint, tag_id uint) error {
 
 func SetAudioTag(id uint, tag_id uint) error {
 	var s Audio
-	if err := db.First(&s, id).Error; err != nil {
+	if err := DB.First(&s, id).Error; err != nil {
 		return err
 	}
 
@@ -114,7 +113,7 @@ func SetAudioTag(id uint, tag_id uint) error {
 
 func SetScriptTag(id uint, tag_id uint) error {
 	var s Script
-	if err := db.First(&s, id).Error; err != nil {
+	if err := DB.First(&s, id).Error; err != nil {
 		return err
 	}
 
